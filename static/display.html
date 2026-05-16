@@ -8,6 +8,7 @@
         :root {
             --virtron-green: #016e34;
             --virtron-green-bright: #25d366;
+            --virtron-green-light: #e8f5e9; /* Tom de verde claro solicitado */
             --bg-light: #f4f7f6;
             --bg-white: #ffffff;
             --text-dark: #1a1a1a;
@@ -93,16 +94,17 @@
             animation: pulse 2s infinite;
         }
 
-        /* Main Section (~50%) */
+        /* Main Section (~50%) - ATUALIZADO COM VERDE CLARO */
         .main-section {
             flex: 2;
-            background-color: var(--bg-white);
+            background-color: var(--virtron-green-light); /* Alterado de var(--bg-white) para var(--virtron-green-light) */
             margin: 10px 20px 5px 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border: 1px solid #c8e6c9; /* Borda sutil para combinar com o verde claro */
         }
 
         .main-header-info {
@@ -115,7 +117,7 @@
         .main-code {
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--text-muted);
+            color: var(--virtron-green); /* Mantido verde para contraste no fundo claro */
         }
 
         .main-city {
@@ -137,7 +139,7 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            border-top: 2px solid var(--bg-light);
+            border-top: 2px solid rgba(0,0,0,0.05); /* Ajustado para contraste no fundo verde */
             padding-top: 15px;
         }
 
@@ -158,8 +160,9 @@
         .notes-box {
             margin-top: 15px;
             padding: 10px;
-            background: #fff9e6;
+            background: #ffffff; /* Fundo branco para as notas se destacarem no verde */
             border-left: 5px solid #ffcc00;
+            border-radius: 4px;
             font-size: 1.1rem;
             font-weight: 600;
         }
