@@ -3,7 +3,9 @@ from sqlmodel import Session, select
 from models import OrderBase, Order
 from database import get_session
 
+
 router = APIRouter()
+
 
 @router.post("/orders")
 def create_order(order: OrderBase, session: Session = Depends(get_session)):
