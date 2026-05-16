@@ -19,7 +19,7 @@ def create_order(order: OrderBase, session: Session = Depends(get_session)):
 def get_display(session: Session = Depends(get_session)):
 
     # queries de filtrando por status:
-    
+
     statement = select(Order).where(Order.status == "in_progress")
     in_progress = session.exec(statement).first()
 
@@ -34,3 +34,15 @@ def get_display(session: Session = Depends(get_session)):
         "next": next_order,
         "previous": previous
     }
+
+@router.patch("/orders/{id}")
+def update_order(id: int, status: str, session: Session = Depends(get_session)):
+
+    order = session.get(Order, id)
+    order.status = status
+
+    session.add(order)
+    session.commit()
+    session.refresh(order)
+
+    return order
