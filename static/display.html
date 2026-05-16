@@ -8,6 +8,7 @@
         :root {
             --virtron-green: #016e34;
             --virtron-green-bright: #25d366;
+            --virtron-green-light: #e8f5e9; /* Tom de verde claro solicitado */
             --bg-light: #f4f7f6;
             --bg-white: #ffffff;
             --text-dark: #1a1a1a;
@@ -45,13 +46,13 @@
         }
 
         .logo-img {
-            height: 60px; /* Ajuste conforme necessário */
+            height: 55px;
             width: auto;
             display: block;
         }
 
         .clock {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--text-muted);
             font-variant-numeric: tabular-nums;
@@ -62,7 +63,7 @@
 
         /* Layout Sections */
         .section {
-            padding: 20px 40px;
+            padding: 15px 30px;
             display: flex;
             flex-direction: column;
         }
@@ -71,11 +72,11 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .section-title {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -85,66 +86,94 @@
         .status-badge {
             background-color: var(--virtron-green);
             color: white;
-            padding: 8px 20px;
+            padding: 6px 15px;
             border-radius: 50px;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
             text-transform: uppercase;
             animation: pulse 2s infinite;
-            box-shadow: 0 4px 10px rgba(1, 110, 52, 0.3);
         }
 
-        /* Main Section (~50%) */
+        /* Main Section (~50%) - ATUALIZADO COM VERDE CLARO */
         .main-section {
             flex: 2;
-            background-color: var(--bg-white);
-            margin: 15px 20px 10px 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+            background-color: var(--virtron-green-light); /* Alterado de var(--bg-white) para var(--virtron-green-light) */
+            margin: 10px 20px 5px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             display: flex;
             flex-direction: column;
             justify-content: center;
+            border: 1px solid #c8e6c9; /* Borda sutil para combinar com o verde claro */
+        }
+
+        .main-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .main-code {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--virtron-green); /* Mantido verde para contraste no fundo claro */
+        }
+
+        .main-city {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--virtron-green);
         }
 
         .client-name-large {
-            font-size: 7rem;
+            font-size: 5rem;
             font-weight: 900;
-            color: var(--virtron-green);
+            color: var(--text-dark);
             line-height: 1;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            word-wrap: break-word;
         }
 
         .main-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            border-top: 3px solid var(--bg-light);
-            padding-top: 25px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            border-top: 2px solid rgba(0,0,0,0.05); /* Ajustado para contraste no fundo verde */
+            padding-top: 15px;
         }
 
         .info-block .label {
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 700;
         }
 
         .info-block .value {
-            font-size: 3.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--text-dark);
         }
 
+        .notes-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #ffffff; /* Fundo branco para as notas se destacarem no verde */
+            border-left: 5px solid #ffcc00;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         /* Next Section (~25%) */
         .next-section {
-            flex: 1;
+            flex: 1.2;
             background-color: #eef5f3;
             margin: 5px 20px;
-            border-radius: 15px;
-            border-left: 12px solid var(--virtron-green-bright);
+            border-radius: 12px;
+            border-left: 10px solid var(--virtron-green-bright);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -152,60 +181,57 @@
 
         .next-grid {
             display: grid;
-            grid-template-columns: 2.5fr 1fr 1fr 1fr;
+            grid-template-columns: 0.8fr 2fr 1.2fr 1fr 1fr 1fr;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .next-client {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            text-transform: uppercase;
-        }
-
-        .next-info .label { font-size: 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;}
-        .next-info .value { font-size: 2.2rem; font-weight: 700; color: var(--virtron-green); }
+        .next-code { font-size: 1.5rem; font-weight: 700; color: var(--text-muted); }
+        .next-client { font-size: 2rem; font-weight: 800; text-transform: uppercase; }
+        .next-info .label { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;}
+        .next-info .value { font-size: 1.3rem; font-weight: 700; color: var(--virtron-green); }
 
         /* Previous Section (~25%) */
         .previous-section {
-            flex: 1;
-            margin: 5px 20px 20px 20px;
+            flex: 1.2;
+            margin: 5px 20px 15px 20px;
         }
 
         .prev-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 15px;
             height: 100%;
         }
 
         .prev-card {
             background-color: var(--bg-white);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             border: 1px solid var(--border-light);
         }
 
-        .prev-client {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #444;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-
-        .prev-details {
+        .prev-header {
             display: flex;
-            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
         }
 
-        .prev-info { font-size: 1.2rem; color: var(--text-muted); font-weight: 700; }
-        .prev-info span { color: var(--virtron-green); }
+        .prev-code { font-size: 1.1rem; font-weight: 700; color: #999; }
+        .prev-client { font-size: 1.6rem; font-weight: 800; color: #444; text-transform: uppercase; }
+        
+        .prev-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .prev-info { font-size: 0.9rem; color: var(--text-muted); font-weight: 700; }
+        .prev-info span { color: var(--virtron-green); display: block; font-size: 1.1rem; }
 
         /* Animations */
         @keyframes pulse {
@@ -220,31 +246,47 @@
 <body>
 
     <header class="header">
-        <!-- Logo oficial extraído do site -->
         <img src="https://grupovirtron.com/wp-content/uploads/2025/11/logo1012.png" alt="Virtron Energia Solar" class="logo-img">
         <div class="clock" id="clock">00:00:00</div>
     </header>
 
-    <!-- PRINCIPAL -->
+    <!-- EM CARREGAMENTO -->
     <main class="section main-section">
         <div class="section-header">
             <span class="status-badge">Em Carregamento</span>
         </div>
         <div class="main-content">
+            <div class="main-header-info">
+                <div class="main-code" id="main-code">—</div>
+                <div class="main-city" id="main-city">—</div>
+            </div>
             <div class="client-name-large" id="main-client">—</div>
+            
             <div class="main-grid">
                 <div class="info-block">
-                    <div class="label">Placas Solares</div>
+                    <div class="label">Qtd Placas</div>
                     <div class="value" id="main-qty">—</div>
                 </div>
                 <div class="info-block">
-                    <div class="label">Rota / Destino</div>
-                    <div class="value" id="main-route">—</div>
+                    <div class="label">Módulos</div>
+                    <div class="value" id="main-modules">—</div>
                 </div>
                 <div class="info-block">
-                    <div class="label">Tipo de Produto</div>
-                    <div class="value" id="main-product">—</div>
+                    <div class="label">Inversor</div>
+                    <div class="value" id="main-inverter">—</div>
                 </div>
+                <div class="info-block">
+                    <div class="label">Kit Tech</div>
+                    <div class="value" id="main-kit">—</div>
+                </div>
+                <div class="info-block">
+                    <div class="label">Telhado</div>
+                    <div class="value" id="main-roof">—</div>
+                </div>
+            </div>
+
+            <div class="notes-box" id="main-notes-box">
+                <strong>OBS:</strong> <span id="main-notes">—</span>
             </div>
         </div>
     </main>
@@ -255,18 +297,23 @@
             <div class="section-title">Próximo da Fila</div>
         </div>
         <div class="next-grid">
+            <div class="next-code" id="next-code">—</div>
             <div class="next-client" id="next-client">—</div>
             <div class="next-info">
-                <div class="label">Placas</div>
-                <div class="value" id="next-qty">—</div>
+                <div class="label">Placas / Módulos</div>
+                <div class="value" id="next-panels-mod">—</div>
             </div>
             <div class="next-info">
-                <div class="label">Rota</div>
-                <div class="value" id="next-route">—</div>
+                <div class="label">Inversor</div>
+                <div class="value" id="next-inverter">—</div>
             </div>
             <div class="next-info">
-                <div class="label">Produto</div>
-                <div class="value" id="next-product">—</div>
+                <div class="label">Cidade</div>
+                <div class="value" id="next-city">—</div>
+            </div>
+            <div class="next-info">
+                <div class="label">Telhado</div>
+                <div class="value" id="next-roof">—</div>
             </div>
         </div>
     </section>
@@ -277,7 +324,6 @@
             <div class="section-title">Últimos Concluídos</div>
         </div>
         <div class="prev-container" id="prev-container">
-            <!-- Cards gerados dinamicamente -->
             <div class="prev-card"><div class="prev-client">—</div></div>
             <div class="prev-card"><div class="prev-client">—</div></div>
         </div>
@@ -286,7 +332,7 @@
     <script>
         const API_URL = 'http://127.0.0.1:8000/display';
 
-        function format(val) {
+        function f(val) {
             return (val === null || val === undefined || val === '') ? '<span class="empty-val">—</span>' : val;
         }
 
@@ -296,21 +342,29 @@
                 if (!res.ok) throw new Error();
                 const data = await res.json();
                 
-                // Main
+                // --- IN PROGRESS ---
                 const p = data.in_progress || {};
-                document.getElementById('main-client').innerHTML = format(p.client_name);
-                document.getElementById('main-qty').innerHTML = format(p.solar_panels_qty);
-                document.getElementById('main-route').innerHTML = format(p.route);
-                document.getElementById('main-product').innerHTML = format(p.product_type);
+                document.getElementById('main-code').innerHTML = f(p.code);
+                document.getElementById('main-client').innerHTML = f(p.client_name);
+                document.getElementById('main-city').innerHTML = f(p.city);
+                document.getElementById('main-qty').innerHTML = f(p.solar_panels_qty);
+                document.getElementById('main-modules').innerHTML = f(p.modules);
+                document.getElementById('main-inverter').innerHTML = f(p.inverter);
+                document.getElementById('main-kit').innerHTML = f(p.kit_tech);
+                document.getElementById('main-roof').innerHTML = f(p.roof_type);
+                document.getElementById('main-notes').innerHTML = f(p.notes);
+                document.getElementById('main-notes-box').style.display = p.notes ? 'block' : 'none';
 
-                // Next
+                // --- NEXT ---
                 const n = data.next || {};
-                document.getElementById('next-client').innerHTML = format(n.client_name);
-                document.getElementById('next-qty').innerHTML = format(n.solar_panels_qty);
-                document.getElementById('next-route').innerHTML = format(n.route);
-                document.getElementById('next-product').innerHTML = format(n.product_type);
+                document.getElementById('next-code').innerHTML = f(n.code);
+                document.getElementById('next-client').innerHTML = f(n.client_name);
+                document.getElementById('next-panels-mod').innerHTML = `${f(n.solar_panels_qty)} / ${f(n.modules)}`;
+                document.getElementById('next-inverter').innerHTML = f(n.inverter);
+                document.getElementById('next-city').innerHTML = f(n.city);
+                document.getElementById('next-roof').innerHTML = f(n.roof_type);
 
-                // Previous
+                // --- PREVIOUS ---
                 const container = document.getElementById('prev-container');
                 container.innerHTML = '';
                 const list = data.previous || [];
@@ -323,17 +377,22 @@
                         card.innerHTML = '<div class="prev-client">—</div>';
                     } else {
                         card.innerHTML = `
+                            <div class="prev-header">
+                                <div class="prev-code">${f(item.code)}</div>
+                                <div class="prev-info">${f(item.city)}</div>
+                            </div>
                             <div class="prev-client">${item.client_name}</div>
-                            <div class="prev-details">
-                                <div class="prev-info">Qtd: <span>${format(item.solar_panels_qty)}</span></div>
-                                <div class="prev-info">Rota: <span>${format(item.route)}</span></div>
+                            <div class="prev-grid">
+                                <div class="prev-info">Placas: <span>${f(item.solar_panels_qty)}</span></div>
+                                <div class="prev-info">Inversor: <span>${f(item.inverter)}</span></div>
+                                <div class="prev-info">Telhado: <span>${f(item.roof_type)}</span></div>
                             </div>
                         `;
                     }
                     container.appendChild(card);
                 }
             } catch (e) {
-                // Silencioso para não poluir a tela da TV
+                console.warn("API Offline");
             }
         }
 

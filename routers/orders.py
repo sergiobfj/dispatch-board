@@ -57,9 +57,7 @@ def list_orders(session: Session = Depends(get_session)):
     statement = select(Order)
     orders = session.exec(statement).all()
 
-    return{
-        "orders": orders
-    }
+    return orders
 
 @router.post("/import")
 async def import_orders(file: UploadFile, session: Session = Depends(get_session)):

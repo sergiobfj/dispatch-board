@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Almoxarifado - Virtron Energia Solar</title>
+    <style>
+        :root {
+            --virtron-green: #016e34;
+            --virtron-green-hover: #015026;
+            --bg-light: #f8faf9;
+            --bg-white: #ffffff;
+            --text-dark: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #dfe6e9;
+            --status-waiting: #fab1a0;
+            --status-progress: #55efc4;
+            --status-completed: #dfe6e9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding-bottom: 50px;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--virtron-green);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-img { height: 40px; }
+
+        /* Actions Bar */
+        .actions-bar {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--virtron-green);
+            color: white;
+        }
+
+        .btn-primary:hover { background: var(--virtron-green-hover); }
+
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .btn-start { background: #e1f5fe; color: #0288d1; }
+        .btn-complete { background: #e8f5e9; color: #2e7d32; }
+
+        /* Order Cards / List */
+        .orders-container {
+            padding: 0 5%;
+            display: grid;
+            gap: 15px;
+        }
+
+        .order-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .order-card.status-completed {
+            opacity: 0.6;
+            background: #f1f2f6;
+        }
+
+        .order-id {
+            background: #eee;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 800;
+            color: var(--text-muted);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .order-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .info-item .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .info-item .value {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .client-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--virtron-green);
+            grid-column: 1 / -1;
+        }
+
+        /* Responsive Grid */
+        @media (max-width: 768px) {
+            .order-card {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .order-actions {
+                display: flex;
+                justify-content: flex-end;
+            }
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Modal / Loading */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 1000;
+            place-items: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay">PROCESSANDO...</div>
+
+    <nav class="navbar">
+        <img src="https://grupovirtron.com/wp-content/uploads/2025/11/logo1012.png" alt="Virtron" class="logo-img">
+        <div style="font-weight: 800; color: var(--virtron-green);">PAINEL ADMIN</div>
+    </nav>
+
+    <div class="actions-bar">
+        <h2 id="total-orders">Pedidos (0)</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="file" id="excel-input" accept=".xlsx, .xls" style="display: none;">
+            <button class="btn btn-primary" onclick="document.getElementById('excel-input').click()">
+                <span>📤</span> Importar Excel
+            </button>
+            <button class="btn" onclick="loadOrders()" style="background: #eee;">
+                <span>🔄</span> Atualizar
+            </button>
+        </div>
+    </div>
+
+    <div class="orders-container" id="orders-list">
+        <!-- Pedidos serão inseridos aqui -->
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000';
+
+        async function loadOrders() {
+            try {
+                const res = await fetch(`${API_BASE}/orders`);
+                const orders = await res.json();
+                renderOrders(orders);
+            } catch (e) {
+                alert('Erro ao carregar pedidos. Verifique se a API está rodando.');
+            }
+        }
+
+        function renderOrders(orders) {
+            const list = document.getElementById('orders-list');
+            document.getElementById('total-orders').textContent = `Pedidos (${orders.length})`;
+            list.innerHTML = '';
+
+            orders.forEach(order => {
+                const isCompleted = order.status === 'completed';
+                const card = document.createElement('div');
+                card.className = `order-card status-${order.status}`;
+                
+                card.innerHTML = `
+                    <div class="order-id">${order.code || 'S/N'}</div>
+                    <div class="order-info">
+                        <div class="client-name">${order.client_name}</div>
+                        <div class="info-item"><div class="label">Cidade</div><div class="value">${order.city || '—'}</div></div>
+                        <div class="info-item"><div class="label">Placas</div><div class="value">${order.solar_panels_qty}</div></div>
+                        <div class="info-item"><div class="label">Módulos</div><div class="value">${order.modules || '—'}</div></div>
+                        <div class="info-item"><div class="label">Inversor</div><div class="value">${order.inverter || '—'}</div></div>
+                        <div class="info-item"><div class="label">Kit Tech</div><div class="value">${order.kit_tech || '—'}</div></div>
+                        <div class="info-item"><div class="label">Telhado</div><div class="value">${order.roof_type || '—'}</div></div>
+                        <div class="info-item" style="grid-column: 1 / -1;"><div class="label">Obs</div><div class="value">${order.notes || '—'}</div></div>
+                    </div>
+                    <div class="order-actions">
+                        ${renderActionButtons(order)}
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function renderActionButtons(order) {
+            if (order.status === 'waiting') {
+                return `<button class="btn btn-action btn-start" onclick="updateStatus(${order.id}, 'in_progress')">▶ Iniciar</button>`;
+            } else if (order.status === 'in_progress') {
+                return `<button class="btn btn-action btn-complete" onclick="updateStatus(${order.id}, 'completed')">✅ Concluir</button>`;
+            }
+            return `<span style="color: #999; font-weight: bold;">CONCLUÍDO</span>`;
+        }
+
+        async function updateStatus(id, status) {
+            toggleLoading(true);
+            try {
+                const res = await fetch(`${API_BASE}/orders/${id}?status=${status}`, {
+                    method: 'PATCH'
+                });
+                if (res.ok) loadOrders();
+                else alert('Erro ao atualizar status.');
+            } catch (e) {
+                alert('Erro de conexão com a API.');
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        // Importação de Excel
+        document.getElementById('excel-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            toggleLoading(true);
+            try {
+                const res = await fetch(`${API_BASE}/import`, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (res.ok) {
+                    alert('Importação concluída com sucesso!');
+                    loadOrders();
+                } else {
+                    alert('Erro ao importar arquivo.');
+                }
+            } catch (e) {
+                alert('Erro de conexão ao importar.');
+            } finally {
+                toggleLoading(false);
+                e.target.value = '';
+            }
+        });
+
+        function toggleLoading(show) {
+            document.getElementById('loading-overlay').style.display = show ? 'grid' : 'none';
+        }
+
+        // Inicializar
+        loadOrders();
+        // Atualizar a cada 30 segundos automaticamente no admin
+        setInterval(loadOrders, 30000);
+    </script>
+</body>
+</html>
