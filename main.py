@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from database import create_db
 from routers.orders import router
 from fastapi.staticfiles import StaticFiles
