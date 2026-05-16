@@ -46,3 +46,13 @@ def update_order(id: int, status: str, session: Session = Depends(get_session)):
     session.refresh(order)
 
     return order
+
+@router.get("/orders")
+def list_orders(session: Session = Depends(get_session)):
+    
+    statement = select(Order)
+    orders = session.exec(statement).all()
+
+    return{
+        "orders": orders
+    }
