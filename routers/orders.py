@@ -24,15 +24,14 @@ def get_display(session: Session = Depends(get_session)):
 
     # queries de filtrando por status:
 
-    statement = select(Order).where(Order.status == "in_progress")
+    statement = select(Order).where(Order.status == "in_progress").order_by(Order.created_at)
     in_progress = session.exec(statement).first()
 
-    statement = select(Order).where(Order.status == 'waiting')
+    statement = select(Order).where(Order.status == 'waiting').order_by(Order.created_at)
     next_order = session.exec(statement).first()
 
-    statement = select(Order).where(Order.status == "completed")
-    previous = session.exec(statement).all() 
-
+    statement = select(Order).where(Order.status == "completed").order_by(Order.created_at.desc()).limit(2)
+    previous = session.exec(statement).all()
     return {
         "in_progress": in_progress,
         "next": next_order,
