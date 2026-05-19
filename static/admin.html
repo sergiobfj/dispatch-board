@@ -279,7 +279,8 @@
                     body: formData
                 });
                 if (res.ok) {
-                    alert('Importação concluída com sucesso!');
+                    const result = await res.json();
+                    alert(`Importados: ${result.imported} | Ignorados (duplicatas): ${result.skipped}`);
                     loadOrders();
                 } else {
                     alert('Erro ao importar arquivo.');

@@ -24,15 +24,14 @@ def get_display(session: Session = Depends(get_session)):
 
     # queries de filtrando por status:
 
-    statement = select(Order).where(Order.status == "in_progress")
+    statement = select(Order).where(Order.status == "in_progress").order_by(Order.created_at)
     in_progress = session.exec(statement).first()
 
-    statement = select(Order).where(Order.status == 'waiting')
+    statement = select(Order).where(Order.status == 'waiting').order_by(Order.created_at)
     next_order = session.exec(statement).first()
 
-    statement = select(Order).where(Order.status == "completed")
-    previous = session.exec(statement).all() 
-
+    statement = select(Order).where(Order.status == "completed").order_by(Order.created_at.desc()).limit(2)
+    previous = session.exec(statement).all()
     return {
         "in_progress": in_progress,
         "next": next_order,
@@ -65,8 +64,19 @@ async def import_orders(file: UploadFile, session: Session = Depends(get_session
     workbook = openpyxl.load_workbook(BytesIO(contents))
     sheet = workbook.active
 
+    imported = 0
+    skipped = 0
+
+
     for row in sheet.iter_rows(min_row=2, values_only=True):
+        if all( v is None for v in row):
+            continue
         code, client_name, solar_panels_qty, modules, inverter, kit_tech, city, notes, roof_type = row
+
+        existing = session.exec(select(Order).where(Order.code == code)).first()
+        if existing:
+            skipped += 1
+            continue
 
         order = Order(
             code = code,
@@ -79,10 +89,13 @@ async def import_orders(file: UploadFile, session: Session = Depends(get_session
             notes = notes,
             roof_type = roof_type
         )
+
+        imported += 1
     
         session.add(order)
 
     session.commit()
     return {
-        "message": "Importado com sucesso"
+    "imported": imported,
+    "skipped": skipped
     }
